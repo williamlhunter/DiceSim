@@ -15,7 +15,7 @@ class Die(object):
             l = len(prob_n_minus_1)
             for j in reversed(range(l)):
                 if prob_n_minus_1[j] != 0:
-                    for i in range(1,self.n):
+                    for i in range(1,self.n+1):
                         prob_n_minus_1[i+j] += prob_n_minus_1[j] / self.n
                     prob_n_minus_1[j] = 0
             return prob_n_minus_1
