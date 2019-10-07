@@ -4,7 +4,7 @@ class Die(object):
         self.p = [1/n_sides]*n_sides
         self.n = n_sides
 
-    #outputs a deque of floats where p_n(n)[i+1] is the probability that the total of n dice is i.
+    #returns a list of floats where the value at each index is the probability of the sum at that index + 1 being rolled.
     def prob_n_dice_dist(self, rolls):
         if rolls == 1:
             return self.p
@@ -20,3 +20,26 @@ class Die(object):
                     prob_n_minus_1[j] = 0
             return prob_n_minus_1
     
+    #returns a list of floats where the value at each index is the probability of rolling the index + 1 after rolling 2 dice and discarding the lowest.
+    def advantage_dist(self):
+        dist = [0]*self.n
+        d_p = 1 / (self.n**2)
+        for i in range(self.n):
+            for j in range(self.n):
+                if i > j:
+                    dist[i] += d_p
+                if j >= i:
+                    dist[j] += d_p
+        return dist
+
+    #returns a list of floats where the value at each index is the probability of rolling the index + 1 after rolling 2 dice and discarding the highest.
+    def disadvantage_dist(self):
+        dist = [0]*self.n
+        d_p = 1 / (self.n**2)
+        for i in range(self.n):
+            for j in range(self.n):
+                if i > j:
+                    dist[j] += d_p
+                if j >= i:
+                    dist[i] += d_p
+        return dist
