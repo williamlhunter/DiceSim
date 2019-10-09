@@ -28,27 +28,3 @@ class DiscreteDist(list):
     
     def __imul__(self, other):
         return self * other
-
-    # returns the probability distribution for the greatest of 2 trials of the distribution
-    def best_of_2(self):
-        out = DiscreteDist([0.0]*len(self))
-        l = len(self)
-        for i in range(l):
-            for j in range(l):
-                if i >= j:
-                    out[i] += self[i]*self[j]
-                elif j > i:
-                    out[j] += self[i]*self[j]
-        return out
-
-    # returns the probability distribution for the lowest of 2 trials of the distribution
-    def worst_of_2(self):
-        out = DiscreteDist([0.0]*len(self))
-        l = len(self)
-        for i in range(l):
-            for j in range(l):
-                if i >= j:
-                    out[i] += self[i]*self[j]
-                elif j > i:
-                    out[j] += self[i]*self[j]
-        return out
