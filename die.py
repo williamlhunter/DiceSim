@@ -1,8 +1,10 @@
+from dist_transformer import RollDistribution
+
 class Die(object):
 
-    def __init__(self, n_sides):
-        self.p = [1/n_sides]*n_sides
-        self.n = n_sides
+    def __init__(self, sides):
+        self.p = RollDistribution([1/sides]*sides)
+        self.n = sides
 
     #returns a list of floats where the value at each index is the probability of the sum at that index + 1 being rolled.
     def prob_n_dice_dist(self, rolls):
@@ -22,24 +24,8 @@ class Die(object):
     
     #returns a list of floats where the value at each index is the probability of rolling the index + 1 after rolling 2 dice and discarding the lowest.
     def advantage_dist(self):
-        dist = [0]*self.n
-        d_p = 1 / (self.n**2)
-        for i in range(self.n):
-            for j in range(self.n):
-                if i > j:
-                    dist[i] += d_p
-                if j >= i:
-                    dist[j] += d_p
-        return dist
+        self.p.advantage()
 
     #returns a list of floats where the value at each index is the probability of rolling the index + 1 after rolling 2 dice and discarding the highest.
     def disadvantage_dist(self):
-        dist = [0]*self.n
-        d_p = 1 / (self.n**2)
-        for i in range(self.n):
-            for j in range(self.n):
-                if i > j:
-                    dist[j] += d_p
-                if j >= i:
-                    dist[i] += d_p
-        return dist
+        self.p.advantage()

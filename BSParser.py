@@ -33,7 +33,7 @@ class KTModel(object):
 
     def __init__(self, selection_entry):
         self.stats = {}
-        self.stats['cost'] = int(float(selection_entry['costs']['cost']['@value']))
+        self.stats['PTS'] = int(float(selection_entry['costs']['cost']['@value']))
         for e in selection_entry['profiles']['profile'][0]['characteristics']['characteristic']:
             try:
                 self.stats[e['@name']] = int(re.findall(r'\d+', e['#text'])[0])
