@@ -1,4 +1,5 @@
 import json
+from dist_transformer import DiscreteDist
 
 class Data(object):
 
@@ -16,6 +17,10 @@ class Data(object):
         for item in raw_monsters:
             self.monsters[item['name']] = item
 
+class Attack(object):
 
-db = Data()
-print(db.monsters['Wolf'])
+    def __init__(self, to_hit_bonus, damage_bonus, damage_die, advantage=0):
+
+        hit_roll = DiscreteDist([1/20]*20)
+        if advantage == 0:
+            hit_roll = 0

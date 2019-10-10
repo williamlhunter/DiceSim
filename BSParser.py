@@ -2,11 +2,11 @@ import xmltodict
 import re
 
 #contains stats for each unit and weapon for a race, each in it's own dictionary
-class KTRace(object):
+class Race(object):
 
     def __init__(self, race):
         self.units = {}
-        self.upgrades = {}
+        self.weapons = {}
         self.models = {}
         try:
             with open('/Users/billhunter/OneDrive/Code/KTData/wh40k-killteam/' + race + '.cat') as data_file:
@@ -21,15 +21,13 @@ class KTRace(object):
             if entry['@type'] == 'unit':
                 self.units[entry['@name']] = entry
             elif entry['@type'] == 'upgrade':
-                self.upgrades[entry['@name']] = entry
+                self.weapons[entry['@name']] = Weapon(entry)
             elif entry['@type'] == 'model':
-                self.models[entry['@name']] = KTModel(entry)
+                self.models[entry['@name']] = Model(entry)
         
 
 #represents the relevant parts of a model for KillTeam
-class KTModel(object):
-
-    stat_names = ['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'LD', 'SV', 'MAX']
+class Model(object):
 
     def __init__(self, selection_entry):
         self.stats = {}
@@ -39,6 +37,24 @@ class KTModel(object):
                 self.stats[e['@name']] = int(re.findall(r'\d+', e['#text'])[0])
             except Exception as x:
                 self.stats[e['@name']] = 0
+    
+    def __str__(self):
+        return str(self.stats)
+
+class Weapon(object):
+
+    def __init__(self, selection_entry):
+        self.stats = {}
+        self.stats['PTS'] = int(float(selection_entry['costs']['cost']['@value']))
+        for e in selection_entry['profiles']['profile'][0]['characteristics']['characteristic']:
+            name = e['@name']
+            if name == 'Type' or name == 'Abilities':
+                self.stats[name] = e['#text']
+            else:
+                try:
+                    self.stats[name] = int(re.findall(r'\d+', e['#text'])[0])
+                except:
+                    self.stats[e['@name']] = 0
     
     def __str__(self):
         return str(self.stats)
